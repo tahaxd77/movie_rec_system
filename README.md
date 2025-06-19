@@ -64,20 +64,31 @@ pip install -r requirements.txt
 
 *(If `requirements.txt` is not present, install Flask and other dependencies manually, e.g., `pip install flask pandas scikit-learn`)*
 
+Certainly! Here is the markdown code for the updated **Usage** section:
+
+```markdown
 ## Usage
 
-1. Run the Flask application:
+1. **Download the MovieLens 32M dataset:**  
+   Download the dataset from the official GroupLens site:  
+   [https://grouplens.org/datasets/movielens/32m/](https://grouplens.org/datasets/movielens/32m/)  
+   Extract the downloaded `ml-32m.zip` file to your project directory.
 
-```bash
-python app.py
+2. **Run the Jupyter Notebook:**  
+   Open the `recommendation_system.ipynb` notebook to preprocess the dataset, train the recommendation model using Spark MLlib, and save the trained model along with the processed movies dataset for use in the Flask app.
+
+3. **Run the Flask application:**  
+   ```
+   python app.py
+   ```
+
+4. **Open your web browser and go to:**  
+   ```
+   http://127.0.0.1:5000/
+   ```
+
+This workflow ensures you have the latest MovieLens data processed and the trained model ready to serve personalized movie recommendations efficiently.
 ```
-
-2. Open your web browser and go to:
-
-```
-http://127.0.0.1:5000/
-```
-
 3. Use the interface to browse genres, search for movies, and get recommendations.
 
 ## Project Structure
