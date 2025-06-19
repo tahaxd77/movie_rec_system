@@ -13,8 +13,6 @@ A web-based Movie Recommendation System built with Python and Flask, leveraging 
 - [Installation](#installation)
 - [Usage](#usage)
 - [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
 
 
 ## About the Project
@@ -111,10 +109,3 @@ movie_recommendation_system/
 ├── static/                   # Static files (CSS, JS, images) if any
 └── README.md                 # Project documentation
 ```
-
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
-
----
