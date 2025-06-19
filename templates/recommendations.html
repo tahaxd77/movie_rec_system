@@ -1,0 +1,129 @@
+
+    {% extends "base.html" %}
+
+{% block title %}Get Recommendations{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white rounded-xl shadow-md p-8 mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">Personalized Recommendations</h1>
+        <p class="text-gray-600 mb-6">Enter your user ID to get movie recommendations tailored just for you.</p>
+
+        <form id="recommendationForm" class="flex items-center">
+            <div class="relative flex-grow mr-4">
+                <input type="number" id="userId" placeholder="Enter your user ID"
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition flex items-center">
+                <i class="fas fa-magic mr-2"></i> Get Recommendations
+            </button>
+        </form>
+    </div>
+
+    <div id="recommendationsContainer" class="hidden">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Your Recommendations</h2>
+            <div class="text-indigo-600 font-medium">
+                <span id="recCount">0</span> movies found
+            </div>
+        </div>
+
+        <div id="recommendationsList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Recommendations will be loaded here via JavaScript -->
+        </div>
+    </div>
+
+    <div id="loadingIndicator" class="hidden text-center py-12">
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600 mb-4"></div>
+        <p class="text-gray-600">Finding the perfect movies for you...</p>
+    </div>
+
+    <div id="errorMessage" class="hidden bg-red-50 border-l-4 border-red-500 p-4 mb-8">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <i class="fas fa-exclamation-circle text-red-500"></i>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-red-800" id="errorTitle">Error</h3>
+                <p class="text-sm text-red-700" id="errorText"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('recommendationForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const userId = document.getElementById('userId').value;
+
+    if (!userId) {
+        showError('Please enter a user ID');
+        return;
+    }
+
+    // Show loading indicator
+    document.getElementById('loadingIndicator').classList.remove('hidden');
+    document.getElementById('recommendationsContainer').classList.add('hidden');
+    document.getElementById('errorMessage').classList.add('hidden');
+
+    // Fetch recommendations
+    fetch(`/api/recommendations/${userId}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('loadingIndicator').classList.add('hidden');
+
+            if (data.recommendations && data.recommendations.length > 0) {
+                displayRecommendations(data.recommendations);
+                document.getElementById('recCount').textContent = data.recommendations.length;
+                document.getElementById('recommendationsContainer').classList.remove('hidden');
+            } else {
+                showError('No recommendations found for this user ID');
+            }
+        })
+        .catch(error => {
+            document.getElementById('loadingIndicator').classList.add('hidden');
+            showError('Failed to fetch recommendations. Please try again.');
+            console.error('Error:', error);
+        });
+});
+
+function displayRecommendations(recommendations) {
+    const container = document.getElementById('recommendationsList');
+    container.innerHTML = '';
+
+    recommendations.forEach(movie => {
+        const movieEl = document.createElement('div');
+        movieEl.className = 'movie-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition';
+        movieEl.innerHTML = `
+            <a href="/movie/${movie.movieId}" class="block">
+                <div class="relative pb-150 overflow-hidden" style="height: 300px;">
+                    <img src="${movie.poster_url}" alt="${movie.title}"
+                         class="absolute h-full w-full object-cover">
+                </div>
+                <div class="p-4">
+                    <h3 class="font-semibold text-gray-800 hover:text-indigo-600 transition">${movie.clean_title}</h3>
+                    ${movie.year !== 'N/A' ? `<span class="text-gray-500 text-sm">${movie.year}</span>` : ''}
+                    <div class="flex items-center mt-2">
+                        <div class="flex text-yellow-400 text-sm mr-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="text-gray-500 text-sm">${movie.predicted_rating.toFixed(1)}</span>
+                    </div>
+                </div>
+            </a>
+        `;
+        container.appendChild(movieEl);
+    });
+}
+
+function showError(message) {
+    document.getElementById('errorText').textContent = message;
+    document.getElementById('errorMessage').classList.remove('hidden');
+}
+</script>
+{% endblock %}
+    

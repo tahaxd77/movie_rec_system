@@ -1,0 +1,53 @@
+
+    {% extends "base.html" %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">Search Results</h1>
+    <p class="text-gray-600">Showing results for: <span class="font-semibold text-indigo-600">"{{ query }}"</span></p>
+</div>
+
+{% if movies %}
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    {% for movie in movies %}
+    <div class="movie-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition">
+        <a href="/movie/{{ movie.movieId }}" class="block">
+            <div class="relative pb-150 overflow-hidden"style="height: 300px;">
+                <img src="{{ movie.poster_url }}" alt="{{ movie.title }}"
+                     class="absolute h-full w-full object-cover">
+            </div>
+        </a>
+        <div class="p-4">
+            <a href="/movie/{{ movie.movieId }}" class="block">
+                <h3 class="font-semibold text-lg text-gray-800 hover:text-indigo-600 transition">{{ movie.clean_title }}</h3>
+            </a>
+            {% if movie.year != 'N/A' %}
+            <span class="text-gray-500 text-sm">{{ movie.year }}</span>
+            {% endif %}
+            <div class="flex flex-wrap gap-1 mt-2">
+                {% for genre in movie.genres.split('|') %}
+                {% if genre != "(no genres listed)" %}
+                <a href="/genre/{{ genre }}" class="text-xs bg-gray-100 hover:bg-indigo-100 text-gray-700 px-2 py-1 rounded-full transition">
+                    {{ genre }}
+                </a>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="bg-white rounded-lg shadow p-8 text-center">
+    <i class="fas fa-search text-4xl text-gray-400 mb-4"></i>
+    <h3 class="text-xl font-medium text-gray-700 mb-2">No movies found</h3>
+    <p class="text-gray-500 mb-4">We couldn't find any movies matching "{{ query }}"</p>
+    <a href="/" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-full transition">
+        Browse Popular Movies
+    </a>
+</div>
+{% endif %}
+{% endblock %}
+    

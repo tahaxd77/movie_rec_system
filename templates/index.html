@@ -1,0 +1,71 @@
+    {% extends "base.html" %}
+
+{% block title %}Discover Movies{% endblock %}
+
+{% block content %}
+<!-- Debug info -->
+<div class="hidden">
+    Debug: {{ popular_movies|length }} movies found
+    {% for movie in popular_movies %}
+        Movie: {{ movie.clean_title }}
+    {% endfor %}
+</div>
+
+<div class="mb-12">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">Discover Movies</h1>
+        <a href="/genres" class="text-indigo-600 hover:text-indigo-800 font-medium">
+            Browse All Genres <i class="fas fa-chevron-right ml-1"></i>
+        </a>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
+        {% for movie in popular_movies %}
+        <a href="/movie/{{ movie.movieId }}" class="movie-card block bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition">
+            <div class="relative pb-150 overflow-hidden" style="height: 300px;">
+                <img src="{{ movie.poster_url }}" alt="{{ movie.clean_title }}"
+                     class="absolute h-full w-full object-cover">
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                    <h3 class="text-white font-semibold text-sm line-clamp-2" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">{{ movie.clean_title }}</h3>
+                    {% if movie.year != 'N/A' %}
+                    <span class="text-gray-300 text-xs" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">{{ movie.year }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="p-3">
+                <div class="flex flex-wrap gap-1 mt-1">
+                    {% for genre in movie.genres.split('|') %}
+                    {% if genre != "(no genres listed)" %}
+                    <span class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full genre-tag">{{ genre }}</span>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="bg-indigo-50 rounded-xl p-8 mb-12">
+    <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-2xl font-bold text-indigo-900 mb-4">Personalized Movie Recommendations</h2>
+        <p class="text-gray-600 mb-6">Get tailored movie suggestions based on your preferences and viewing history.</p>
+        <a href="/recommendations" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-full transition">
+            Get Recommendations <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+    </div>
+</div>
+
+<div>
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Browse by Genre</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        {% for genre in genres_list[:12] %}
+        <a href="/genre/{{ genre }}" class="block bg-white rounded-lg shadow p-4 text-center hover:bg-indigo-50 transition">
+            <i class="fas fa-film text-indigo-500 text-2xl mb-2"></i>
+            <h3 class="font-medium text-gray-800">{{ genre }}</h3>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+    

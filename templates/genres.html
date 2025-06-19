@@ -1,0 +1,44 @@
+
+    {% extends "base.html" %}
+
+{% block title %}Browse by Genre{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">Browse Movies by Genre</h1>
+    <p class="text-gray-600">Explore our collection of movies organized by genre</p>
+</div>
+
+<div class="bg-white rounded-xl shadow-md p-6 mb-8">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Genre Popularity</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for genre, count in genre_stats.items() %}
+        <a href="/genre/{{ genre }}" class="block bg-gray-50 hover:bg-indigo-50 rounded-lg p-4 transition">
+            <div class="flex justify-between items-center">
+                <span class="font-medium text-gray-800">{{ genre }}</span>
+                <span class="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs font-medium">
+                    {{ count }} movies
+                </span>
+            </div>
+            <div class="mt-2 w-full bg-gray-200 rounded-full h-2">
+                <div class="bg-indigo-600 h-2 rounded-full"
+                     style="width: {{ (count / genre_stats.values()|max * 100)|round(1) }}%"></div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+<div>
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">All Genres</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        {% for genre in genres %}
+        <a href="/genre/{{ genre }}" class="block bg-white rounded-lg shadow p-6 text-center hover:bg-indigo-50 transition transform hover:-translate-y-1">
+            <i class="fas fa-film text-indigo-500 text-3xl mb-3"></i>
+            <h3 class="font-medium text-gray-800">{{ genre }}</h3>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+    
