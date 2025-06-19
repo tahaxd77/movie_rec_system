@@ -66,7 +66,7 @@ pip install -r requirements.txt
 
 Certainly! Here is the markdown code for the updated **Usage** section:
 
-```markdown
+
 ## Usage
 
 1. **Download the MovieLens 32M dataset:**  
@@ -88,7 +88,7 @@ Certainly! Here is the markdown code for the updated **Usage** section:
    ```
 
 This workflow ensures you have the latest MovieLens data processed and the trained model ready to serve personalized movie recommendations efficiently.
-```
+
 3. Use the interface to browse genres, search for movies, and get recommendations.
 
 ## Project Structure
